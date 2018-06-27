@@ -1,0 +1,30 @@
+{
+  "name": "de-duplicate",
+  "version": "1.0.0",
+  "description": "Marketo problem",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "npm run test -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Theartbug/de-duplicate.git"
+  },
+  "author": "Grace Provost",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Theartbug/de-duplicate/issues"
+  },
+  "homepage": "https://github.com/Theartbug/de-duplicate#readme",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.5",
+    "babel-jest": "^23.2.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^5.0.1",
+    "jest": "^23.2.0"
+  }
+}
