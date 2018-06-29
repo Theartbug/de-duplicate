@@ -74,10 +74,12 @@ describe('filter tests', () => {
 
 describe('deDuplicate tests', () => {
 
+  const deDuped = {"leads": [{"_id": "jkj238238jdsnfsj23", "address": "888 Mayberry St", "email": "bill@bar.com", "entryDate": "2014-05-07T17:33:20+00:00", "firstName": "John", "lastName": "Smith"}, {"_id": "belr28238jdsnfsj23", "address": "123 Water St", "email": "mae@bar.com", "entryDate": "2014-05-07T17:33:20+00:00", "firstName": "Tallulah", "lastName": "Smith"}, {"_id": "wabaj238238jdsnfsj23", "address": "8803 Dark St", "email": "bog@bar.com", "entryDate": "2014-05-07T17:31:20+00:00", "firstName": "Fran", "lastName": "Jones"}, {"_id": "wuj08238jdsnfsj23", "address": "123 Street St", "email": "foo@bar.com", "entryDate": "2014-05-07T17:33:20+00:00", "firstName": "Micah", "lastName": "Valmer"}, {"_id": "vug789238jdsnfsj23", "address": "123 Reach St", "email": "foo1@bar.com", "entryDate": "2014-05-07T17:33:20+00:00", "firstName": "Blake", "lastName": "Douglas"}]};
+
   it('returns a deduped list', () => {
     const result = deDuplicate(leads);
 
-    expect(result).toBe({});
+    expect(result).toEqual(deDuped);
   });
 });
 

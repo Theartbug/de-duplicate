@@ -6,44 +6,40 @@ export const compare = (current, next) => {
     : next; 
 };
 
-export const filter = (set) => {
+export const filter = (map) => {
 
-  for(let key in set) {
-    set[key] = set[key].reduce((prev, curr) => compare(prev, curr));
+  for(let key in map) {
+    map[key] = map[key].reduce((prev, curr) => compare(prev, curr));
   }
 
-  return set;
+  return map;
+};
+
+export const mapMaker = (list, property) => {
+
+  const map = {};
+
+  for(let record of list) {
+    const specificProperty = record[property];
+    map[specificProperty] 
+      ? map[specificProperty].push(record) 
+      : map[specificProperty] = [record];
+  }
+  return map;
+
 };
 
 export const deDuplicate = (leads) => {
 
   const list = leads.leads;
 
-  //define maps for the records
-  const ids = {};
-  const emails = {};
+  //loop over records first with _ids to find dups
 
-  //loop over records and place into respective maps
-  for(let record of list) {
+  const filteredIds = Object.values(filter(mapMaker(list, '_id')));
 
-    const { _id, email } = record;
-    //check email and _id for existence and place into new array within maps (to maintain order)
+  //loop over these to filter out email dups
 
-    emails[email] 
-      ? emails[email].push(record) 
-      : emails[email] = [record];
-
-    ids[_id]
-      ? ids[_id].push(record)
-      : ids[_id] = [record];
-  }
-
-  //filter over each to remove dups
-
-  const filteredIds = Object.values(filter(ids));
-  const filteredEmails = Object.values(filter(emails));
-
-  return {...filteredIds, ...filteredEmails };
+  return { 'leads': Object.values(filter(mapMaker(filteredIds, 'email'))) };
   
   //provide a log of changes that include:
   //source record, output record
