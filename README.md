@@ -1,5 +1,12 @@
 # de-duplicate
 
+### To run
+
+1. clone the git repository
+1. ``npm i``
+1. ``cd de-duplicate``
+1. ``node --experimental-modules deDuplicate.mjs``
+
 Objective
 ===
 
