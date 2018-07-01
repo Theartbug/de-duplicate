@@ -31,4 +31,84 @@ I initially began the problem with keeping a map of both the emails and ids with
 
 I created simple tests as I went along, and it helped me better determine the shape of my data and results.
 
-I was concerned that the *changes* log would be inaccurate since it logs changes first by ids then by emails. Perhaps there would be a misshap where an id was was changed in the first go, only to be removed again in the email de-dupping. The log would unnecissarily exist in that case. In that case I could create another helper function that looks through every *from* and *to* log, seeing if a *to* of one log matches a *from* of a sequential log. I decided to not do this as the results from the leads.json file appeared clear.
+I was concerned that the *changes* log would be inaccurate since it logs changes first by ids then by emails. Perhaps there would be a misshap where an id was was changed in the first go, only to be removed again in the email de-dupping. The log would unnecessarily exist in that case. I added an extra test record to the *leads.json* array: 
+
+```
+{
+  "_id": "jkj238238jdsnfsj21",
+  "email": "bill@bar.com",
+  "firstName":  "TEST",
+  "lastName": "TEST",
+  "address": "TEST",
+  "entryDate": "2014-05-07T17:33:20+00:00"
+ }
+```
+
+This record had the same email (bill@bar.com) as another record, but a different id. So on the first de-duping with grouped ids, the other record with the same email (bill@bar.com) replaced another with the same id (jkj238238jdsnfsj23). This change was logged:
+
+```
+{ 
+  from:
+    { _id: 'jkj238238jdsnfsj23',
+      email: 'foo@bar.com',
+      firstName: 'John',
+      lastName: 'Smith',
+      address: '123 Street St',
+      entryDate: '2014-05-07T17:30:20+00:00' 
+      },
+  to:
+    { _id: 'jkj238238jdsnfsj23',
+      email: 'bill@bar.com',
+      firstName: 'John',
+      lastName: 'Smith',
+      address: '888 Mayberry St',
+      entryDate: '2014-05-07T17:33:20+00:00'
+    }
+}
+```
+Then when emails were grouped together and de-duped, another log was created with my test case:
+ 
+ ```
+ { 
+  from:
+    { _id: 'jkj238238jdsnfsj23',
+      email: 'bill@bar.com',
+      firstName: 'John',
+      lastName: 'Smith',
+      address: '888 Mayberry St',
+      entryDate: '2014-05-07T17:33:20+00:00' 
+    },
+  to:
+    { _id: 'jkj238238jdsnfsj21',
+      email: 'bill@bar.com',
+      firstName: 'TEST',
+      lastName: 'TEST',
+      address: 'TEST',
+      entryDate: '2014-05-07T17:33:20+00:00' 
+     }
+}
+ ```
+
+I began to create a check in the *filter* function that would see if a record's id previously existed in the logs so it would be caught during the email de-duping. But then I realized that a log that looks like this:
+
+ ```
+ { 
+  from:
+    { _id: 'jkj238238jdsnfsj23',
+      email: 'foo@bar.com',
+      firstName: 'John',
+      lastName: 'Smith',
+      address: '123 Street St',
+      entryDate: '2014-05-07T17:30:20+00:00' 
+     },
+  to:
+    { _id: 'jkj238238jdsnfsj21',
+      email: 'bill@bar.com',
+      firstName: 'TEST',
+      lastName: 'TEST',
+      address: 'TEST',
+      entryDate: '2014-05-07T17:33:20+00:00' 
+     }
+}
+ ```
+Could possibly be even more confusing since the records do not have matching ids or emails! so I decided to let both logs stay so there was clear path between the two levels of de-duping.
