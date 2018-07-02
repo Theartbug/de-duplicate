@@ -29,7 +29,7 @@ Reflection / Changes
 
 I initially began the problem with keeping a map of both the emails and ids with corresponding records and tried to find a way to de-dup each of them at once, then merge them. I realized I should de-dup by one first (I picked ids first), then the next one from that filtered list. I then struggled for a bit to figure out the best place to log changes between fields and records. I picked the *filter* function to keep track of changes, as that function would know if a record was changed, and the final record it would turn into. I then dropped *createFildChanges* into it.
 
-I created simple tests as I went along, and it helped me better determine the shape of my data and results.
+I created simple tests as I went along, and it helped me better determine the shape of my data and results. If the *de-duplicate* function starts with email instead of ids, the output is the same except the order of records within the output object. You can test this by swapping the strings `'_id'` and `'email'` on lines 75 and 79. The tests will fail since they are expecting a particular object order, but the records are the same.
 
 I was concerned that the *changes* log would be inaccurate since it logs changes first by ids then by emails. Perhaps there would be a misshap where an id was was changed in the first go, only to be removed again in the email de-dupping. The log would unnecessarily exist in that case. I added an extra test record to the *leads.json* array: 
 
