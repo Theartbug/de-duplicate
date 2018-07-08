@@ -5,6 +5,8 @@ import leads from './leads.json';
 
 export const mapMaker = (list, property) => {
 
+  //O(n) complexity
+
   const map = {};
 
   for(let record of list) {
@@ -19,12 +21,15 @@ export const mapMaker = (list, property) => {
 
 export const compare = (current, next) => {
   //newest date trumps, else last in list
+  //O(1) complexity
   return new Date(current.entryDate) > new Date(next.entryDate) 
     ? current
     : next; 
 };
 
-export const filter = (map, tracker) => {
+export const filter = (map, tracker = {}) => {
+
+  //O(n^2) complexity due to createFieldChanges and .reduce
 
   const filtered = {};
   for(let key in map) {
@@ -54,6 +59,8 @@ export const filter = (map, tracker) => {
 
 export const createFieldChanges = (from, to) => {
 
+  //O(n) complexity
+
   const changes = {};
 
   for(let entry in from) {
@@ -68,11 +75,13 @@ export const createFieldChanges = (from, to) => {
 
 export const deDuplicate = (leads) => {
 
+  //O(n^2 complexity due to filter)
+
   const list = leads.leads;
 
   //loop over records first with _ids to find dups
 
-  const { filtered: filteredIds, tracker: trackerIds } = filter(mapMaker(list, '_id'), {});
+  const { filtered: filteredIds, tracker: trackerIds } = filter(mapMaker(list, '_id'));
 
   //loop over again to filter out email dups
 
